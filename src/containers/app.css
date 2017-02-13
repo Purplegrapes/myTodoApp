@@ -1,0 +1,23 @@
+
+.appBox {
+    display:flex;
+    justify-content: center;
+    background: #ffffff;
+}
+
+.addBox {
+    height: 50px;
+    line-height: 50px;
+    color:brown;
+}
+
+.header, .add , .cancel {
+    margin: 0 20px;
+}
+
+.editBox {
+    margin: 5px 0 0 43px;
+}
+.add {
+    color:brown;
+}

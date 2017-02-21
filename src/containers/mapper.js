@@ -3,9 +3,33 @@
  */
 import { prop } from 'lodash/fp';
 
+import { createSelector } from 'reselect';
+
 // 这里的 state 是 Connect 的组件的
-export default state => ({
-    todos: prop('todos')(state.todoResult),
-    selectedType: prop('selectedType')(state.todoResult),
-    typeTodos: prop('typeTodos')(state.todoResult)
-});
+const todosSelector = createSelector(
+    prop('todos'),
+
+    todos => todos,
+);
+const selectedTypeSelector = createSelector(
+    prop('selectedType'),
+
+    selectedType => selectedType
+);
+const typeTodosSelector = createSelector(
+    prop('typeTodos'),
+
+    typeTodos => typeTodos
+);
+export default createSelector(
+    todosSelector,
+    selectedTypeSelector,
+    typeTodosSelector,
+
+    (todos, selectedType, typeTodos) => {
+        return ({
+        todos,
+        selectedType,
+        typeTodos,
+    })}
+)

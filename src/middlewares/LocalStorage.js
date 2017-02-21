@@ -15,8 +15,7 @@ export const setLocalStroage = ({ getState }) => next => action => {
       break;
     }
     case CLEAR_COMPLETE: {
-      const nowdata = getState().todoResult.todos;
-      console.log(nowdata);
+      const nowdata = getState().todos;
       for (const todo of nowdata) {
         if (prop('completed')(todo)) {
           localStorage.removeItem(prop('id')(todo));
@@ -26,7 +25,7 @@ export const setLocalStroage = ({ getState }) => next => action => {
     break;
     default: {
       const result = next(action);
-      const nowdata = getState().todoResult.todos;
+      const nowdata = getState().todos;
       for (const todo of nowdata) {
         const localdata = JSON.stringify(todo);
         localStorage.setItem(todo.id, localdata);
@@ -37,7 +36,7 @@ export const setLocalStroage = ({ getState }) => next => action => {
   return next(action);
 };
 
-export const getLocalStorage = () => next => (action) => {
+export const getLocalStorage = ({ getState ,dispatch }) => next => (action) => {
   if (action.payload.isLocal) {
     for (let i = 0; i < localStorage.length; i++) {
       const data = JSON.parse(localStorage.getItem(localStorage.key(i)));
@@ -47,5 +46,4 @@ export const getLocalStorage = () => next => (action) => {
   } else {
     return next(action);
   }
-  return null;
-}
+};

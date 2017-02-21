@@ -1,7 +1,6 @@
 /**
  * Created by zhangqiong on 16/12/27.
  */
-import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import { map, filter, every, concat, remove } from 'lodash/fp';
 import {
@@ -16,54 +15,54 @@ import {
   GET_TODOS,
 } from '../actions/action';
 
-const todoReducer = handleActions({
-    [SELECT_TYPE]: (todoResult, action ) => {
+const todoResult = handleActions({
+    [SELECT_TYPE]: (todoResult, { payload } ) => {
         return({
         ...todoResult,
-        selectedType: action.payload,
-        typeTodos: filter(todo => todo.type === action.payload)(todoResult.todos)
+        selectedType: payload,
+        typeTodos: filter(todo => todo.type === payload)(todoResult.todos)
     })},
-    [ADD_TODO]: (todosApp, action) => ({
-        ...todosApp,
-        todos: concat(todosApp.todos.length === 0
+    [ADD_TODO]: (todoResult, { payload }) => ({
+        ...todoResult,
+        todos: concat(todoResult.todos.length === 0
         ? {
           id: 0,
-          text: action.payload.text,
+          text: payload.text,
           completed: false,
           edited: false,
-          type: action.payload.type,
+          type: payload.type,
         } : {
-          id: Math.max(...(map(item => item.id)(todosApp.todos))) + 1,
-          text: action.payload.text,
+          id: Math.max(...(map(item => item.id)(todoResult.todos))) + 1,
+          text: payload.text,
           completed: false,
           edited: false,
-          type: action.payload.type,
-        })(todosApp.todos),
-        typeTodos: concat(todosApp.todos.length === 0
+          type: payload.type,
+        })(todoResult.todos),
+        typeTodos: concat(todoResult.todos.length === 0
             ? {
                 id: 0,
-                text: action.payload.text,
+                text: payload.text,
                 completed: false,
                 edited: false,
-                type: action.payload.type,
+                type: payload.type,
             } : {
-                id: Math.max(...(map(item => item.id)(todosApp.todos))) + 1,
-                text: action.payload.text,
+                id: Math.max(...(map(item => item.id)(todoResult.todos))) + 1,
+                text: payload.text,
                 completed: false,
                 edited: false,
-                type: action.payload.type,
-            })(todosApp.typeTodos),
+                type: payload.type,
+            })(todoResult.typeTodos),
     }),
-    [GET_TODOS]: (todoResult, action) => {
+    [GET_TODOS]: (todoResult, { data }) => {
       return ({
       ...todoResult,
-      todos: concat(action.data)(todoResult.todos),
-      typeTodos: filter(todo => todo.type === todoResult.selectedType)(concat(action.data)(todoResult.todos))
+      todos: concat(data)(todoResult.todos),
+      typeTodos: filter(todo => todo.type === todoResult.selectedType)(concat(data)(todoResult.todos))
     })},
-    [COMPLETE_TODO]: (todoResult, action) => ({
+    [COMPLETE_TODO]: (todoResult, { payload }) => ({
         ...todoResult,
         todos: map((t) => {
-          if (t.id !== action.payload) {
+          if (t.id !== payload) {
             return t;
           }
           return {
@@ -72,7 +71,7 @@ const todoReducer = handleActions({
           };
           })(todoResult.todos),
         typeTodos: map((t) => {
-            if (t.id !== action.payload) {
+            if (t.id !== payload) {
                 return t;
             }
             return {
@@ -82,10 +81,10 @@ const todoReducer = handleActions({
         })(todoResult.typeTodos)
 
     }),
-    [DEL_TODO]: (todoResult, action) => ({
+    [DEL_TODO]: (todoResult, { payload }) => ({
         ...todoResult,
-        todos: filter(todo => todo.id !== action.payload)(todoResult.todos),
-        typeTodos: filter(todo => todo.id !== action.payload)(todoResult.typeTodos),
+        todos: filter(todo => todo.id !== payload)(todoResult.todos),
+        typeTodos: filter(todo => todo.id !== payload)(todoResult.typeTodos),
     }),
     [CLEAR_COMPLETE]: (todoResult, action) =>({
         ...todoResult,
@@ -112,33 +111,33 @@ const todoReducer = handleActions({
         }))(todoResult.typeTodos)
     });
   },
-  [EDIT_TODO]: (todoResult, action) => ({
+  [EDIT_TODO]: (todoResult, { payload }) => ({
       ...todoResult,
       todos: map(t => {
-          if (t.id !== action.payload.id) {
+          if (t.id !== payload.id) {
               return t;
           }
           return {
               ...t,
-              text: action.payload.text,
+              text: payload.text,
               edited: false,
           };
       })(todoResult.todos),
       typeTodos: map((t) => {
-          if (t.id !== action.payload.id) {
+          if (t.id !== payload.id) {
               return t;
           }
           return {
               ...t,
-              text: action.payload.text,
+              text: payload.text,
               edited: false,
           };
       })(todoResult.typeTodos)
   }),
-  [EDIT_STATUS]: (todoResult, action) => ({
+  [EDIT_STATUS]: (todoResult, { payload }) => ({
       ...todoResult,
       todos: map((t) => {
-          if (t.id === action.payload) {
+          if (t.id === payload) {
               return {
                   ...t,
                   edited: true,
@@ -149,7 +148,7 @@ const todoReducer = handleActions({
           }
       })(todoResult.todos),
       typeTodos: map((t) => {
-          if (t.id === action.payload) {
+          if (t.id === payload) {
               return {
                   ...t,
                   edited: true,
@@ -164,11 +163,9 @@ const todoReducer = handleActions({
   },{
     selectedType:'person',
     todos:[],
-    typeTodos:[],
+    typeTodos: [],
   });
 
-const todoResult = combineReducers({
-    todoResult:todoReducer,
-});
+
 
 export default todoResult;

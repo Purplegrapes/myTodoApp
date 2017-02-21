@@ -15,8 +15,9 @@ export const fetchRender = () => next => (action) => {
       });
   }
   return next(action);
-}
+};
+
 export const logger = () => next => (action) => {
   const result = next(action);
   return result;
-}
+};

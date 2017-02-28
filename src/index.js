@@ -10,8 +10,7 @@ import App from './containers/App';
 import todoResult from './reducers/reducer';
 import { getTodos } from './actions/action';
 import { getLocalStorage, setLocalStroage } from './middlewares/LocalStorage';
-import Perf from 'react-addons-perf';
-Perf.start();
+
 const Logger = createLogger();
 
 const store = createStore(
@@ -25,5 +24,3 @@ ReactDom.render(
     <Provider store={store}>
         <App/>
     </Provider>, document.getElementsByClassName('learn-bar')[0]);
-Perf.stop();
-Perf.printInclusive();

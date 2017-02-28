@@ -4,7 +4,6 @@
 import React, { Component, PropTypes } from 'react';
 import TodoItem from './TodoItem';
 import { prop, every, map } from 'lodash/fp';
-
 class MainSection extends Component {
   static propTypes = {
     onTodoClick: PropTypes.func,

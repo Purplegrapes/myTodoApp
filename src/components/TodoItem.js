@@ -11,12 +11,12 @@ class TodoItem extends Component {
     delTodo: PropTypes.func,
     text: PropTypes.string,
     completed: PropTypes.bool,
-    id: PropTypes.number,
+    id: PropTypes.string,
     edited: PropTypes.bool,
   };
   state = {
     text: this.props.text,
-      edited: false,
+    edited: false,
   };
 
   componentDidUpdate() {

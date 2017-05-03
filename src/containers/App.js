@@ -3,6 +3,7 @@
  */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { filter } from 'lodash/fp';
 import mapper from './mapper';
 import AddTodo from '../components/AddTodo';
 import About from '../components/About';
@@ -23,7 +24,6 @@ import './app.css';
 
 class App extends Component {
   static propTypes = {
-    typeTodos: PropTypes.array.isRequired,
     todos: PropTypes.array.isRequired,
     selectedType: PropTypes.string,
 
@@ -53,9 +53,9 @@ class App extends Component {
     }
   };
 
+
   render() {
     const {
-      typeTodos,
       todos,
       selectedType,
       addTodo,
@@ -67,7 +67,7 @@ class App extends Component {
       toggleAll,
       selectType,
     } = this.props;
-
+    const typeTodos = filter(todo => todo.type === selectedType)(todos);
     return (
       <div>
         <div className='searchBox'>
@@ -87,16 +87,15 @@ class App extends Component {
           <div className='todoapp'>
             {this.showType()}
             <MainSection
-                todos={typeTodos}
+                typeTodos={typeTodos}
                 editTodo={editTodo}
                 editStatus={editStatus}
                 onTodoClick={completeTodo}
                 delTodo={delTodo}
                 toggleTodo={toggleAll}
-                selectedType={selectedType}
             />
             <TodoFooter
-                todos={typeTodos}
+                typeTodos={typeTodos}
                 clearComplete={clearComplete}
             />
             <AddTodo

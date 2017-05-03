@@ -48,4 +48,4 @@ export const getLocalStorage = () => next => (action) => {
     return next(action);
   }
   return null;
-}
+};

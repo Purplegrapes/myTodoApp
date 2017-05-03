@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { reduce, prop, filter } from 'lodash/fp';
 class About extends Component {
     static propTypes = {
-        todos: PropTypes.array.isRequired,
         typeTodos: PropTypes.array.isRequired,
+        todos: PropTypes.array.isRequired,
         selectType: PropTypes.func,
     };
 

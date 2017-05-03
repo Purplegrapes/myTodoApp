@@ -11,17 +11,17 @@ class MainSection extends Component {
     editTodo: PropTypes.func,
     editStatus: PropTypes.func,
     toggleTodo: PropTypes.func,
-    todos: PropTypes.array.isRequired,
     delTodo: PropTypes.func,
+    typeTodos: PropTypes.array,
   };
 
   render() {
-    const { todos, onTodoClick, delTodo, editTodo, toggleTodo, editStatus } = this.props;
+    const { onTodoClick, delTodo, editTodo, toggleTodo, editStatus, typeTodos } = this.props;
     return (
       <section className="main">
         <input
           className="toggle-all" type="checkBox"
-          checked={prop('length')(todos) === 0 ? false : every(todo => prop('completed')(todo))(todos)}
+          checked={prop('length')(typeTodos) === 0 ? false : every(todo => prop('completed')(todo))(typeTodos)}
           onChange={toggleTodo}
         />
         <ul className="todo-list">
@@ -35,7 +35,7 @@ class MainSection extends Component {
                 editTodo={editTodo}
                 editStatus={editStatus}
               />,
-            )(todos)
+            )(typeTodos)
           }
         </ul>
       </section>

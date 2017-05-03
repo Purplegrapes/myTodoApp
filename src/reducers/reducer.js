@@ -3,7 +3,8 @@
  */
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import { map, filter, every, concat, remove } from 'lodash/fp';
+import uuid from 'uuid';
+import { map, filter, every, concat, remove, propEq, flow, } from 'lodash/fp';
 import {
   ADD_TODO,
   EDIT_TODO,
@@ -21,79 +22,46 @@ const todoReducer = handleActions({
         return({
         ...todoResult,
         selectedType: action.payload,
-        typeTodos: filter(todo => todo.type === action.payload)(todoResult.todos)
     })},
-    [ADD_TODO]: (todosApp, action) => ({
-        ...todosApp,
-        todos: concat(todosApp.todos.length === 0
-        ? {
-          id: 0,
-          text: action.payload.text,
+    [ADD_TODO]: (todoResult, { payload: { text, type }}) => ({
+        ...todoResult,
+        todos: concat({
+          id: uuid.v4(),
+          text,
           completed: false,
           edited: false,
-          type: action.payload.type,
-        } : {
-          id: Math.max(...(map(item => item.id)(todosApp.todos))) + 1,
-          text: action.payload.text,
-          completed: false,
-          edited: false,
-          type: action.payload.type,
-        })(todosApp.todos),
-        typeTodos: concat(todosApp.todos.length === 0
-            ? {
-                id: 0,
-                text: action.payload.text,
-                completed: false,
-                edited: false,
-                type: action.payload.type,
-            } : {
-                id: Math.max(...(map(item => item.id)(todosApp.todos))) + 1,
-                text: action.payload.text,
-                completed: false,
-                edited: false,
-                type: action.payload.type,
-            })(todosApp.typeTodos),
+          type,
+        })(todoResult.todos),
     }),
-    [GET_TODOS]: (todoResult, action) => {
-      return ({
+    [GET_TODOS]: (todoResult, action) => ({
       ...todoResult,
       todos: concat(action.data)(todoResult.todos),
-      typeTodos: filter(todo => todo.type === todoResult.selectedType)(concat(action.data)(todoResult.todos))
-    })},
-    [COMPLETE_TODO]: (todoResult, action) => ({
+    }),
+    [COMPLETE_TODO]: (todoResult, { payload }) => ({
         ...todoResult,
-        todos: map((t) => {
-          if (t.id !== action.payload) {
-            return t;
-          }
-          return {
-            ...t,
-            completed: !t.completed,
-          };
-          })(todoResult.todos),
-        typeTodos: map((t) => {
-            if (t.id !== action.payload) {
-                return t;
-            }
+        todos: map((todo) => {
+          if (todo.id === payload) {
             return {
-                ...t,
-                completed: !t.completed,
+              ...todo,
+              completed: !todo.completed,
             };
-        })(todoResult.typeTodos)
-
+          }
+          return todo;
+        })(todoResult.todos),
     }),
-    [DEL_TODO]: (todoResult, action) => ({
+    [DEL_TODO]: (todoResult, { payload }) => ({
         ...todoResult,
-        todos: filter(todo => todo.id !== action.payload)(todoResult.todos),
-        typeTodos: filter(todo => todo.id !== action.payload)(todoResult.typeTodos),
+        todos: filter(todo => todo.id !== payload)(todoResult.todos),
     }),
-    [CLEAR_COMPLETE]: (todoResult, action) =>({
+    [CLEAR_COMPLETE]: (todoResult) =>({
         ...todoResult,
         todos: remove(todo => todo.completed === true && todo.type === todoResult.selectedType)(todoResult.todos),
-        typeTodos: filter(todo => todo.completed === false)(todoResult.typeTodos)
     }),
     [TOGGLE_ALL]: (todoResult) => {
-    const areAllMarked = every(todo => todo.completed)(todoResult.typeTodos);
+    const areAllMarked = flow(
+      filter(propEq('type',todoResult.selectedType)),
+      every(todo => todo.completed),
+      )(todoResult.todos);
     return ({
         ...todoResult,
         todos: map(todo => {
@@ -106,65 +74,38 @@ const todoReducer = handleActions({
             else {
                 return todo;
             }})(todoResult.todos),
-        typeTodos: map(todo => ({
-            ...todo,
-            completed: !areAllMarked,
-        }))(todoResult.typeTodos)
     });
   },
-  [EDIT_TODO]: (todoResult, action) => ({
+  [EDIT_TODO]: (todoResult, { payload: { id, text } }) => ({
       ...todoResult,
-      todos: map(t => {
-          if (t.id !== action.payload.id) {
-              return t;
+      todos: map(todo => {
+          if (todo.id !== id) {
+              return todo;
           }
           return {
-              ...t,
-              text: action.payload.text,
+              ...todo,
+              text,
               edited: false,
           };
       })(todoResult.todos),
-      typeTodos: map((t) => {
-          if (t.id !== action.payload.id) {
-              return t;
-          }
-          return {
-              ...t,
-              text: action.payload.text,
-              edited: false,
-          };
-      })(todoResult.typeTodos)
   }),
-  [EDIT_STATUS]: (todoResult, action) => ({
+  [EDIT_STATUS]: (todoResult, { payload }) => ({
       ...todoResult,
-      todos: map((t) => {
-          if (t.id === action.payload) {
+      todos: map((todo) => {
+          if (todo.id === payload) {
               return {
-                  ...t,
+                  ...todo,
                   edited: true,
               }
           }
           else {
-              return t;
+              return todo;
           }
       })(todoResult.todos),
-      typeTodos: map((t) => {
-          if (t.id === action.payload) {
-              return {
-                  ...t,
-                  edited: true,
-              }
-          }
-          else {
-              return t;
-
-          }
-      })(todoResult.typeTodos),
   }),
   },{
     selectedType:'person',
     todos:[],
-    typeTodos:[],
   });
 
 const todoResult = combineReducers({

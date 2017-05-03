@@ -9,12 +9,12 @@ import '../containers/app.css';
 class TodoFooter extends Component {
   static propTypes = {
     clearComplete: PropTypes.func,
-    todos: PropTypes.array.isRequired,
+    typeTodos: PropTypes.array.isRequired,
   };
 
   render() {
-    const { todos, clearComplete } = this.props;
-    const style = (some(todo => todo.completed)(todos) && prop('length')(todos) !== 0) ? null : { display: 'none' };
+    const { typeTodos, clearComplete } = this.props;
+    const style = (some(todo => todo.completed)(typeTodos) && prop('length')(typeTodos) !== 0) ? null : { display: 'none' };
     return (
       <footer className="footer">
         <button style={style} className='clear-completed button' onClick={clearComplete}>清除已完成</button>

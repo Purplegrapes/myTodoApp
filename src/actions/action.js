@@ -15,7 +15,7 @@ export const EDIT_STATUS = 'EDIT_STATUS';
 export const SELECT_TYPE = 'SELECT_TYPE';
 export const SEARCH_TODO = 'SEARCH_TODO';
 
-export const addTodo = createAction(ADD_TODO,(text,type) => ({text,type}));
+export const addTodo = createAction(ADD_TODO, (text,type) => ({text,type}));
 export const editStatus = createAction(EDIT_STATUS);
 export const editTodo = createAction(EDIT_TODO, (text, id) => ({ text, id }));
 export const completeTodo = createAction(COMPLETE_TODO);

@@ -18,11 +18,10 @@ import {
 } from '../actions/action';
 
 const todoReducer = handleActions({
-    [SELECT_TYPE]: (todoResult, action ) => {
-        return({
+    [SELECT_TYPE]: (todoResult, action ) => ({
         ...todoResult,
         selectedType: action.payload,
-    })},
+    }),
     [ADD_TODO]: (todoResult, { payload: { text, type }}) => ({
         ...todoResult,
         todos: concat({

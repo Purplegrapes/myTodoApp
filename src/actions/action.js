@@ -8,10 +8,10 @@ export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const DEL_TODO = 'DEL_TODO';
 export const CLEAR_COMPLETE = 'CLEAR_COMPLETE';
 export const EDIT_TODO = 'EDIT_TODO';
+export const EDIT_STATUS = 'EDIT_STATUS';
 export const TOGGLE_ALL = 'TOGGLE_ALL';
 export const FETCH_TODOS = 'FETCH_TODOS';
 export const GET_TODOS = 'GET_TODOS';
-export const EDIT_STATUS = 'EDIT_STATUS';
 export const SELECT_TYPE = 'SELECT_TYPE';
 export const SEARCH_TODO = 'SEARCH_TODO';
 

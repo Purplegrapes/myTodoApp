@@ -16,7 +16,6 @@ class TodoItem extends Component {
   };
   state = {
     text: this.props.text,
-    edited: false,
   };
 
   componentDidUpdate() {
@@ -24,16 +23,6 @@ class TodoItem extends Component {
           this.textInput.focus();
       }
   }
-
-  onTodoClick = () => {
-    const { onTodoClick, id } = this.props;
-    onTodoClick(id);
-  };
-
-  delTodoClick = () => {
-    const { delTodo, id } = this.props;
-    delTodo(id);
-  };
 
   handleKeyDown = () => {
     const { text } = this.state;
@@ -47,22 +36,17 @@ class TodoItem extends Component {
     });
   };
 
-  toggleEditStatus = () => {
-    const { id, editStatus } = this.props;
-    editStatus(id);
-  };
-
   render() {
-    const { text, completed, edited } = this.props;
+    const { text, completed, edited, editStatus, onTodoClick, id, delTodo } = this.props;
     const inputStyle = edited === true ? 'editing' : null;
     return (
       <li
         className={inputStyle}
       >
         <div className="view">
-          <input className="toggle" type="checkBox" checked={completed} onChange={this.onTodoClick} />
-          <label onClick={this.toggleEditStatus} style={{ textDecoration: completed ? 'line-through' : 'none' }}>{text}</label>
-          <button className="destroy" onClick={this.delTodoClick} />
+          <input className="toggle" type="checkBox" checked={completed} onChange={() => onTodoClick(id)} />
+          <label onClick={() => editStatus(id)} style={{ textDecoration: completed ? 'line-through' : 'none' }}>{text}</label>
+          <button className="destroy" onClick={() => delTodo(id)} />
         </div>
         <input className="edit" value={this.state.text} onChange={this.handleChange} onBlur={this.handleKeyDown} ref={input => this.textInput = input}/>
           {edited ?

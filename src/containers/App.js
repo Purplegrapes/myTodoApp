@@ -1,14 +1,15 @@
 /**
  * Created by zhangqiong on 16/12/27.
  */
-import React, { Component, PropTypes } from 'react';
+import React, {  PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { filter } from 'lodash/fp';
-import mapper from './mapper';
-import AddTodo from '../components/AddTodo';
-import About from '../components/About';
-import MainSection from '../components/MainSection';
-import TodoFooter from '../components/TodoFooter';
+import { createSelector } from 'reselect';
+import { compose, pure, setPropTypes, setDisplayName, withHandlers } from 'recompose';
+import { prop, filter, propEq } from 'lodash/fp';
+import AddTodo from '../components/addTodo';
+import About from '../components/type';
+import MainSection from '../components/mainSection';
+import TodoFooter from '../components/todoFooter';
 import '../main.css';
 import {
   addTodo as addTodoAction,
@@ -21,10 +22,29 @@ import {
   selectType as selectTypeAction,
 } from '../actions/action';
 import './app.css';
+export default compose(
+  pure,
+  connect(createSelector(
+    prop('todoResult.todos'),
+    prop('todoResult.selectedType'),
 
-class App extends Component {
-  static propTypes = {
+    (todos, selectedType) => ({
+      todos,
+      typeTodos: filter(propEq('type',selectedType))(todos),
+      selectedType,
+    })), {
+    addTodo: addTodoAction,
+    editTodo: editTodoAction,
+    editStatus: editStatusAction,
+    completeTodo: completeTodoAction,
+    delTodo: delTodoAction,
+    clearComplete: clearCompleteAction,
+    toggleAll: toggleAllAction,
+    selectType: selectTypeAction,
+  }),
+  setPropTypes({
     todos: PropTypes.array.isRequired,
+    typeTodos: PropTypes.array.isRequired,
     selectedType: PropTypes.string,
 
     addTodo: PropTypes.func.isRequired,
@@ -35,10 +55,11 @@ class App extends Component {
     clearComplete: PropTypes.func.isRequired,
     toggleAll: PropTypes.func.isRequired,
     selectType: PropTypes.func,
-  };
-  showType = () => {
-    const { selectedType } = this.props;
-    switch (selectedType){
+  }),
+  setDisplayName('App'),
+  withHandlers({
+    showType: ({ selectedType }) => () => {
+      switch (selectedType){
         case 'home':
           return <h1>家庭</h1>;
         case 'work':
@@ -50,74 +71,59 @@ class App extends Component {
         default:
           return <h1>个人</h1>;
 
-    }
-  };
-
-
-  render() {
-    const {
-      todos,
-      selectedType,
-      addTodo,
-      editStatus,
-      editTodo,
-      completeTodo,
-      delTodo,
-      clearComplete,
-      toggleAll,
-      selectType,
-    } = this.props;
-    const typeTodos = filter(todo => todo.type === selectedType)(todos);
-    return (
-      <div>
-        <div className='searchBox'>
-          todoApp
-        </div>
-        <div className='appBox'>
-          <About selectType={selectType}
-                 typeTodos={typeTodos}
-                 todos={todos}
-          >
-            <span name="个人" id="person"></span>
-            <span name="工作" id="work"></span>
-            <span name="学习" id="study"></span>
-            <span name="购物" id="shopping"></span>
-            <span name="家庭" id="home"></span>
-          </About>
-          <div className='todoapp'>
-            {this.showType()}
-            <MainSection
-                typeTodos={typeTodos}
-                editTodo={editTodo}
-                editStatus={editStatus}
-                onTodoClick={completeTodo}
-                delTodo={delTodo}
-                toggleTodo={toggleAll}
-            />
-            <TodoFooter
-                typeTodos={typeTodos}
-                clearComplete={clearComplete}
-            />
-            <AddTodo
-                onAddClick={addTodo}
-                selectedType={selectedType}
-            />
-          </div>
-        </div>
-        <div className="footBox"></div>
+      }
+    },
+  }),
+)(({
+  todos,
+  selectedType,
+  addTodo,
+  editStatus,
+  editTodo,
+  completeTodo,
+  delTodo,
+  clearComplete,
+  toggleAll,
+  selectType,
+  typeTodos,
+  showType,
+}) => (
+  <div>
+    <div className='Header'>
+      备忘录
+    </div>
+    <div className='appBox'>
+      <About selectType={selectType}
+             typeTodos={typeTodos}
+             todos={todos}
+      >
+        <span name="个人" id="person"></span>
+        <span name="工作" id="work"></span>
+        <span name="学习" id="study"></span>
+        <span name="购物" id="shopping"></span>
+        <span name="家庭" id="home"></span>
+      </About>
+      <div className='todoapp'>
+        {showType()}
+        <MainSection
+          typeTodos={typeTodos}
+          editTodo={editTodo}
+          editStatus={editStatus}
+          onTodoClick={completeTodo}
+          delTodo={delTodo}
+          toggleTodo={toggleAll}
+          clearComplete={clearComplete}
+        />
+        <TodoFooter
+          typeTodos={typeTodos}
+          clearComplete={clearComplete}
+        />
+        <AddTodo
+          onAddClick={addTodo}
+          selectedType={selectedType}
+        />
       </div>
-
-    );
-  }
-}
-
-export default connect(mapper, {
-  addTodo: addTodoAction,
-  editTodo: editTodoAction,
-  editStatus: editStatusAction,
-  completeTodo: completeTodoAction,
-  delTodo: delTodoAction,
-  clearComplete: clearCompleteAction,
-  toggleAll: toggleAllAction,
-  selectType: selectTypeAction,
-})(App);
+    </div>
+    <div className="footBox"></div>
+  </div>
+));

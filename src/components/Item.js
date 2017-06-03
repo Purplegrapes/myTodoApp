@@ -2,6 +2,7 @@
  * Created by zhangqiong on 16/12/21.
  */
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router'
 class TodoItem extends Component {
   static propTypes = {
     onTodoClick: PropTypes.func,
@@ -39,22 +40,11 @@ class TodoItem extends Component {
     const { text, completed, edited, editStatus, onTodoClick, id, delTodo } = this.props;
     const inputStyle = edited === true ? 'editing' : null;
     return (
-      <li
-        className={inputStyle}
-      >
-        <div className="view">
-          <input className="toggle" type="checkBox" checked={completed} onChange={() => onTodoClick(id)} />
-          <label onClick={() => editStatus(id)} style={{ textDecoration: completed ? 'line-through' : 'none' }}>{text}</label>
-          <button className="destroy" onClick={() => delTodo(id)} />
-        </div>
-        <input className="edit" value={this.state.text} onChange={this.handleChange} onBlur={this.handleKeyDown} ref={input => this.textInput = input}/>
-          {edited ?
-              <div className='editBox'>
-                  <button className='button' onClick={this.handleKeyDown}>保存</button>
-              </div> :
-              null
-          }
-      </li>
+      <div>
+        <h5>
+          233
+        </h5>
+      </div>
 
     );
   }

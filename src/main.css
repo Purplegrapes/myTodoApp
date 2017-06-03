@@ -52,7 +52,6 @@ input[type="checkbox"] {
   position: relative;
   align-self: flex-start;
   max-height: 520px;
-  overflow: scroll;
 }
 
 .todoapp input::-webkit-input-placeholder {
@@ -147,6 +146,8 @@ label[for='toggle-all'] {
 .todo-list {
   padding: 0;
   list-style: none;
+  height: 250px;
+  overflow: scroll;
 }
 
 .todo-list li {
@@ -253,8 +254,6 @@ label[for='toggle-all'] {
   padding: 10px 15px;
   height: 50px;
   text-align: center;
-  display: flex;
-  justify-content: space-around;
 }
 
 .todo-count {
@@ -361,12 +360,14 @@ html .clear-completed:active {
 }
 
 .typeBox {
-    margin: 20% 5%;
+    margin: 20% 5% 2% 5%;
 }
 
 .types {
     text-align: justify;
     font-size: 16px;
+  overflow: scroll;
+  height: 320px;
 }
 
 .type {
@@ -418,4 +419,9 @@ a {
     font-size: 14px;
     color: #000000;
 
+}
+.buttonFlex{
+  display: flex;
+  margin: 10px 0;
+  justify-content: space-around;
 }

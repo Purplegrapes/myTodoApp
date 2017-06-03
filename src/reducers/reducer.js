@@ -15,12 +15,20 @@ import {
   SELECT_TYPE,
   TOGGLE_ALL,
   GET_TODOS,
+  ADD_TYPE,
 } from '../actions/action';
 
 const todoReducer = handleActions({
     [SELECT_TYPE]: (todoResult, action ) => ({
         ...todoResult,
         selectedType: action.payload,
+    }),
+    [ADD_TYPE]: (todoResult, action ) => ({
+        ...todoResult,
+        types: concat({
+          id: uuid.v4(),
+          name: action.payload,
+        })(todoResult.types),
     }),
     [ADD_TODO]: (todoResult, { payload: { text, type }}) => ({
         ...todoResult,
@@ -105,6 +113,13 @@ const todoReducer = handleActions({
   },{
     selectedType:'person',
     todos:[],
+    types: [
+      { name: '个人', id: 'person'},
+      { name: '工作', id: 'work'},
+      { name: '学习', id: 'study'},
+      { name: '购物', id: 'shopping'},
+      { name: '家庭', id: 'home'},
+    ]
   });
 
 const todoResult = combineReducers({

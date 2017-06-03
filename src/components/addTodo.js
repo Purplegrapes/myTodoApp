@@ -2,8 +2,10 @@
  * Created by zhangqiong on 16/12/27.
  */
 import React, { Component, PropTypes } from 'react';
-import { Icon } from 'antd';
+import { Icon, Modal, DatePicker } from 'antd';
 import '../containers/app.css';
+
+const { MonthPicker, RangePicker } = DatePicker;
 
 export default class AddTodo extends Component {
   static propTypes = {
@@ -32,7 +34,11 @@ export default class AddTodo extends Component {
       this.setState({
         text: '',
       });
+      this.setState({
+        show: false,
+      });
     }
+
   };
   handleChange = ({ target: { value } }) => {
     this.setState({ text: value });
@@ -54,25 +60,27 @@ export default class AddTodo extends Component {
   render() {
     return (
       <div className="header">
-          {this.state.show ?
-              <div>
-                <input
-                    className="new-todo" type="text"
-                    placeholder="例如：周三15点开会 "
-                    value={this.state.text}
-                    onChange={this.handleChange}
-                    onKeyDown={this.handleKeyDown}
-                />
-                <button className='button' onClick={this.addTodo}>添加任务</button>
-                <a className='cancel' onClick={this.hideInput}>取消</a>
-              </div> :
-              null
-          }
         <div onClick={this.showInput} className='addBox'>
           <Icon type="plus" />
           <a className='add'>添加任务</a>
         </div>
-
+        <Modal
+          title="添加任务"
+          visible={this.state.show}
+          onOk={this.addTodo}
+          onCancel={this.hideInput}
+        >
+          <input
+            style={{ height: "30px", width: "80%"}}
+            type="text"
+            value={this.state.text}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
+          />
+          <div>
+            <DatePicker />
+          </div>
+        </Modal>
       </div>
     );
   }

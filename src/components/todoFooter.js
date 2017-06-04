@@ -8,9 +8,8 @@ import {
   setPropTypes,
   compose,
   withProps,
-  withHandlers,
 } from 'recompose';
-import { some, prop, filter } from 'lodash/fp';
+import { some, prop } from 'lodash/fp';
 import '../containers/app.css';
 
 export default compose(

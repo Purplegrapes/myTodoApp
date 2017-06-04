@@ -83,6 +83,7 @@ class About extends Component {
                         {map(({ id, name }) => {
                           return (
                             <div
+                              key={id}
                               onClick={this.changeType(id)}
                               className={this.getActiveClass(id)}
                             >
@@ -105,6 +106,7 @@ class About extends Component {
                     <input
                       style={{ height: "30px", width: "80%"}}
                       type="text"
+                      placeholder="请输入需要添加的分类"
                       value={this.state.text}
                       onChange={this.handleChange}
                       onKeyDown={this.handleKeyDown}

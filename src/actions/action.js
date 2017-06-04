@@ -15,9 +15,9 @@ export const GET_TODOS = 'GET_TODOS';
 export const SELECT_TYPE = 'SELECT_TYPE';
 export const ADD_TYPE = 'ADD_TYPE';
 
-export const addTodo = createAction(ADD_TODO, (text,type) => ({text,type}));
+export const addTodo = createAction(ADD_TODO, (text,type, time) => ({text,type, time}));
 export const editStatus = createAction(EDIT_STATUS);
-export const editTodo = createAction(EDIT_TODO, (text, id) => ({ text, id }));
+export const editTodo = createAction(EDIT_TODO, (text, id, time) => ({ text, id, time }));
 export const completeTodo = createAction(COMPLETE_TODO);
 export const delTodo = createAction(DEL_TODO);
 export const clearComplete = createAction(CLEAR_COMPLETE);

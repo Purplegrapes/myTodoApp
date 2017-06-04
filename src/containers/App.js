@@ -4,8 +4,17 @@
 import React, {  PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { compose, pure, setPropTypes, setDisplayName, withProps } from 'recompose';
-import { prop, filter, propEq, map, flow, find } from 'lodash/fp';
+import { Icon, Popover, Modal, Timeline } from 'antd';
+import {
+  compose,
+  pure,
+  setPropTypes,
+  setDisplayName,
+  withProps,
+  withState,
+  withHandlers,
+} from 'recompose';
+import { prop, filter, propEq, flow, find, map, reject, sortBy } from 'lodash/fp';
 import AddTodo from '../components/addTodo';
 import About from '../components/type';
 import MainSection from '../components/mainSection';
@@ -23,6 +32,8 @@ import {
   addType as addTypeAction,
 } from '../actions/action';
 import './app.css';
+
+const Item = Timeline.Item;
 export default compose(
   pure,
   connect(createSelector(
@@ -61,12 +72,54 @@ export default compose(
     selectType: PropTypes.func,
   }),
   setDisplayName('App'),
-  withProps(({ selectedType, types }) => ({
+  withState('show', 'setShow', false),
+  withState('list', 'setList', []),
+  withState('line', 'setLine', false),
+  withHandlers({
+    showModal: ({ setShow, setList }) => (todo) => {
+      setList(todo);
+      setShow(true);
+
+    },
+    hideModal: ({ setShow }) => () => {
+      setShow(false);
+    },
+    showLine: ({ setLine }) => () => {
+      setLine(true);
+
+    },
+    hideLine: ({ setLine }) => () => {
+      setLine(false);
+    }
+  }),
+  withProps(({ todos }) => ({
+    completedTodos: filter(todo => todo.completed)(todos),
+    unCompletedTodos: reject(todo => todo.completed)(todos),
+    timeTodos: sortBy('time')(todos),
+  })),
+  withProps(({ selectedType, types, showLine, showModal, completedTodos, unCompletedTodos }) => ({
     name: flow(
       find(propEq('id', selectedType)),
       prop('name'),
-    )(types)
+    )(types),
+    content: (
+      <div>
+        <div className="setting2" onClick={() => showModal(completedTodos)}>
+          <Icon type="check" className="Icon"/>
+          <div className="text">已完成任务</div>
+        </div>
+        <div className="setting2" onClick={() => showModal(unCompletedTodos)}>
+          <Icon type="exclamation" className="Icon"/>
+          <div className="text">未完成任务</div>
+        </div>
+        <div className="setting2" onClick={showLine}>
+          <Icon type="edit" className="Icon" />
+          <div className="text">按截止时间查看</div>
+        </div>
+      </div>
+    ),
   })),
+
 )(({
   todos,
   selectedType,
@@ -83,17 +136,62 @@ export default compose(
   addType,
   types,
   name,
+  showModal,
+  hideModal,
+  showLine,
+  hideLine,
+  list,
+  show,
+  content,
+  line,
+  timeTodos,
 }) => (
   <div>
     <div className='Header'>
       备忘录
+      <Popover placement="bottomRight" content={content} >
+        <Icon type="ellipsis" style={{ float: "right", margin: "10px 15px 0 0"}}/>
+      </Popover>
     </div>
+    <Modal
+      title={prop('completed')(list[0]) ? "已完成任务" : "未完成任务"}
+      visible={show}
+      onCancel={hideModal}
+      footer={null}
+    >
+      {list.length === 0 ?
+        <span style={{ textAlign: 'center'}}>暂无数据</span> : map(({ text, id, completed }) => <div className="view" key={id}>
+          <label
+            style={{ textDecoration: completed ? 'line-through' : 'none' }}
+          >
+            {text}
+          </label>
+        </div>)(list)}
+    </Modal>
+    <Modal
+      title="按截止时间查看"
+      visible={line}
+      onCancel={hideLine}
+      footer={null}
+    >
+      <Timeline>
+        {map(({ text, id, completed, time }) => <div className="view" key={id}>
+
+          <Item
+            style={{ textDecoration: completed ? 'line-through' : 'none' }}
+          >
+            {text} <span style={{ color: '#7d0f0f'}}>截止时间：{time}</span>
+          </Item>
+        </div>)(timeTodos)}
+      </Timeline>
+    </Modal>
     <div className='appBox'>
-      <About selectType={selectType}
-             typeTodos={typeTodos}
-             todos={todos}
-             types={types}
-             addType={addType}
+      <About
+        selectType={selectType}
+        typeTodos={typeTodos}
+        todos={todos}
+        types={types}
+        addType={addType}
       >
       </About>
       <div className='todoapp'>

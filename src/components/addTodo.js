@@ -3,9 +3,6 @@
  */
 import React, { Component, PropTypes } from 'react';
 import { Icon, Modal, DatePicker } from 'antd';
-import '../containers/app.css';
-
-const { MonthPicker, RangePicker } = DatePicker;
 
 export default class AddTodo extends Component {
   static propTypes = {
@@ -15,6 +12,7 @@ export default class AddTodo extends Component {
   state = {
     text: '',
     show: false,
+    time: null,
   };
   handleKeyDown = (e) => {
     const { text } = this.state;
@@ -27,10 +25,11 @@ export default class AddTodo extends Component {
     }
   };
   addTodo = () => {
-    const { text } = this.state;
+    const { text, time } = this.state;
     const { onAddClick,selectedType } = this.props;
     if (text !== '') {
-      onAddClick(text,selectedType);
+      debugger;
+      onAddClick(text,selectedType,time);
       this.setState({
         text: '',
       });
@@ -57,6 +56,13 @@ export default class AddTodo extends Component {
       });
   };
 
+  setDate = (date, dateString) => {
+    this.setState({
+      time: dateString,
+    });
+
+  };
+
   render() {
     return (
       <div className="header">
@@ -70,15 +76,19 @@ export default class AddTodo extends Component {
           onOk={this.addTodo}
           onCancel={this.hideInput}
         >
-          <input
+          <textarea
             style={{ height: "30px", width: "80%"}}
             type="text"
             value={this.state.text}
+            placeholder="例如，周日野营需要准备的东西"
             onChange={this.handleChange}
             onKeyDown={this.handleKeyDown}
           />
-          <div>
-            <DatePicker />
+          <div style={{ marginTop: "10px"}}>
+            <DatePicker
+              placeholder="请选择截止日期"
+              onChange={this.setDate}
+            />
           </div>
         </Modal>
       </div>

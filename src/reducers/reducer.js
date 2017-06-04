@@ -30,7 +30,7 @@ const todoReducer = handleActions({
           name: action.payload,
         })(todoResult.types),
     }),
-    [ADD_TODO]: (todoResult, { payload: { text, type }}) => ({
+    [ADD_TODO]: (todoResult, { payload: { text, type, time }}) => ({
         ...todoResult,
         todos: concat({
           id: uuid.v4(),
@@ -38,6 +38,7 @@ const todoReducer = handleActions({
           completed: false,
           edited: false,
           type,
+          time,
         })(todoResult.todos),
     }),
     [GET_TODOS]: (todoResult, action) => ({
@@ -83,7 +84,7 @@ const todoReducer = handleActions({
             }})(todoResult.todos),
     });
   },
-  [EDIT_TODO]: (todoResult, { payload: { id, text } }) => ({
+  [EDIT_TODO]: (todoResult, { payload: { id, text, time } }) => ({
       ...todoResult,
       todos: map(todo => {
           if (todo.id !== id) {
@@ -92,6 +93,7 @@ const todoReducer = handleActions({
           return {
               ...todo,
               text,
+              time,
               edited: false,
           };
       })(todoResult.todos),

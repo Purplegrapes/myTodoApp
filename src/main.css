@@ -177,6 +177,7 @@ label[for='toggle-all'] {
 
 .todo-list li .toggle {
   text-align: center;
+  padding: 10px 0;
   width: 40px;
   /* auto, since non-WebKit browsers doesn't support input styling */
   height: auto;
@@ -312,9 +313,7 @@ html .clear-completed:active {
     background: none;
   }
 
-  .todo-list li .toggle {
-    height: 40px;
-  }
+
 
   .toggle-all {
     -webkit-transform: rotate(90deg);
@@ -346,7 +345,7 @@ html .clear-completed:active {
 }
 
 .Header {
-    background: rgba(144, 129, 130, 0.93);
+    background: #981919;
     height: 50px;
     font-size: 25px;
     color:#ffffff;
@@ -424,4 +423,48 @@ a {
   display: flex;
   margin: 10px 0;
   justify-content: space-around;
+}
+.setting{
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+}
+.text {
+  border-bottom: 1px solid #ccc;
+}
+.setting2{
+  height: 30px;
+  display: flex;
+  line-height: 30px;
+  font-size: 14px;
+  justify-content: flex-start;
+
+}
+.Icon{
+  margin: 7px 10px 0 0;
+  font-size: 18px;
+}
+
+.view label {
+  white-space: pre-line;
+  word-break: break-all;
+  padding: 10px 60px 10px 15px;
+  display: block;
+  font-size: 15px;
+  line-height: 1.2;
+  transition: color 0.4s;
+  border-bottom: 1px solid #ededed;
+}
+.ant-modal-header {
+  text-align: center;
+  background-color: #981919;
+  color: #ffffff;
+}
+
+.listModal{
+  height: 500px;
+  overflow: scroll;
+}
+.view{
+  width: 500px;
 }

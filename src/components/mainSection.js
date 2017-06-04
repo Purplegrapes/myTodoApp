@@ -1,12 +1,11 @@
 /**
  * Created by zhangqiong on 16/12/21.
  */
-import React, { Component, PropTypes } from 'react';
-import { pure, compose, withHandlers, withProps, setPropTypes, withState } from 'recompose';
-import { Icon } from 'antd';
+import React, { PropTypes } from 'react';
+import { pure, compose, withProps, setPropTypes } from 'recompose';
 
 import TodoItem from './todoItem';
-import { prop, every, map , some, filter, reject } from 'lodash/fp';
+import { prop, every, map, some } from 'lodash/fp';
 import '../containers/app.css';
 
 export default compose(

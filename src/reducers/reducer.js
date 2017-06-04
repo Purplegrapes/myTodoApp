@@ -4,7 +4,7 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 import uuid from 'uuid';
-import { map, filter, every, concat, remove, propEq, flow, } from 'lodash/fp';
+import { map, filter, every, concat, remove, propEq, flow, includes} from 'lodash/fp';
 import {
   ADD_TODO,
   EDIT_TODO,
@@ -16,6 +16,7 @@ import {
   TOGGLE_ALL,
   GET_TODOS,
   ADD_TYPE,
+  CLEAR_ALL_COMPLETED,
 } from '../actions/action';
 
 const todoReducer = handleActions({
@@ -23,13 +24,16 @@ const todoReducer = handleActions({
         ...todoResult,
         selectedType: action.payload,
     }),
-    [ADD_TYPE]: (todoResult, action ) => ({
+    [ADD_TYPE]: (todoResult, { payload: { name, color}} ) => {
+      return ({
         ...todoResult,
         types: concat({
           id: uuid.v4(),
-          name: action.payload,
+          name,
+          color,
         })(todoResult.types),
-    }),
+      })
+    },
     [ADD_TODO]: (todoResult, { payload: { text, type, time }}) => ({
         ...todoResult,
         todos: concat({
@@ -65,6 +69,13 @@ const todoReducer = handleActions({
         ...todoResult,
         todos: remove(todo => todo.completed === true && todo.type === todoResult.selectedType)(todoResult.todos),
     }),
+    [CLEAR_ALL_COMPLETED]: (todoResult, { payload }) => {
+      debugger;
+      return ({
+        ...todoResult,
+        todos: remove(todo => includes(todo.id, payload))(todoResult.todos),
+      })
+    },
     [TOGGLE_ALL]: (todoResult) => {
     const areAllMarked = flow(
       filter(propEq('type',todoResult.selectedType)),
@@ -117,11 +128,11 @@ const todoReducer = handleActions({
     selectedType:'person',
     todos:[],
     types: [
-      { name: '个人', id: 'person'},
-      { name: '工作', id: 'work'},
-      { name: '学习', id: 'study'},
-      { name: '购物', id: 'shopping'},
-      { name: '家庭', id: 'home'},
+      { name: '个人', id: 'person', color: '#04A3FF'},
+      { name: '工作', id: uuid.v4(), color: '#FFA400'},
+      { name: '学习', id: uuid.v4(), color: '#008B00'},
+      { name: '购物', id: uuid.v4(), color: '#C1232B'},
+      { name: '家庭', id: uuid.v4(), color: '#27727B'},
     ]
   });
 

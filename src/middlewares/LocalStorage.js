@@ -1,11 +1,13 @@
 /**
  * Created by zhangqiong on 17/1/3.
  */
-import { prop } from 'lodash/fp';
+import { prop, isUndefined } from 'lodash/fp';
 import {
   CLEAR_COMPLETE,
   GET_TODOS,
   DEL_TODO,
+  GET_TYPES,
+  ADD_TYPE,
 } from '../actions/action';
 
 export const setLocalStroage = ({ getState }) => next => action => {
@@ -16,7 +18,6 @@ export const setLocalStroage = ({ getState }) => next => action => {
     }
     case CLEAR_COMPLETE: {
       const nowdata = getState().todoResult.todos;
-      console.log(nowdata);
       for (const todo of nowdata) {
         if (prop('completed')(todo)) {
           localStorage.removeItem(prop('id')(todo));

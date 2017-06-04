@@ -4,7 +4,7 @@
 import React, {  PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Icon, Popover, Modal, Timeline } from 'antd';
+import { Icon, Popover, Modal, Timeline, Button } from 'antd';
 import {
   compose,
   pure,
@@ -30,10 +30,12 @@ import {
   toggleAll as toggleAllAction,
   selectType as selectTypeAction,
   addType as addTypeAction,
+  clearAllCompleted as clearAllCompletedAction,
 } from '../actions/action';
 import './app.css';
 
 const Item = Timeline.Item;
+
 export default compose(
   pure,
   connect(createSelector(
@@ -56,6 +58,7 @@ export default compose(
     toggleAll: toggleAllAction,
     selectType: selectTypeAction,
     addType: addTypeAction,
+    clearAllCompleted: clearAllCompletedAction,
   }),
   setPropTypes({
     todos: PropTypes.array.isRequired,
@@ -90,6 +93,10 @@ export default compose(
     },
     hideLine: ({ setLine }) => () => {
       setLine(false);
+    },
+    clearAllCompletedHandler: ({ list, clearAllCompleted, setShow }) => (ids) => {
+      clearAllCompleted(ids);
+      setShow(false);
     }
   }),
   withProps(({ todos }) => ({
@@ -145,6 +152,7 @@ export default compose(
   content,
   line,
   timeTodos,
+  clearAllCompletedHandler,
 }) => (
   <div>
     <div className='Header'>
@@ -157,7 +165,8 @@ export default compose(
       title={prop('completed')(list[0]) ? "已完成任务" : "未完成任务"}
       visible={show}
       onCancel={hideModal}
-      footer={null}
+      footer={list.length === 0 || !prop('completed')(list[0]) ? null :
+        <Button onClick={() => clearAllCompletedHandler(map(prop('id'))(list))}>清除已完成</Button>}
     >
       {list.length === 0 ?
         <span style={{ textAlign: 'center'}}>暂无数据</span> : map(({ text, id, completed }) => <div className="view" key={id}>

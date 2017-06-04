@@ -14,6 +14,7 @@ export const FETCH_TODOS = 'FETCH_TODOS';
 export const GET_TODOS = 'GET_TODOS';
 export const SELECT_TYPE = 'SELECT_TYPE';
 export const ADD_TYPE = 'ADD_TYPE';
+export const CLEAR_ALL_COMPLETED = 'CLEAR_ALL_COMPLETED';
 
 export const addTodo = createAction(ADD_TODO, (text,type, time) => ({text,type, time}));
 export const editStatus = createAction(EDIT_STATUS);
@@ -21,9 +22,9 @@ export const editTodo = createAction(EDIT_TODO, (text, id, time, type) => ({ tex
 export const completeTodo = createAction(COMPLETE_TODO);
 export const delTodo = createAction(DEL_TODO);
 export const clearComplete = createAction(CLEAR_COMPLETE);
+export const clearAllCompleted = createAction(CLEAR_ALL_COMPLETED);
 export const toggleAll = createAction(TOGGLE_ALL);
 export const selectType = createAction(SELECT_TYPE);
-export const addType = createAction(ADD_TYPE);
+export const addType = createAction(ADD_TYPE, (name, color) => ({ name, color}));
 export const getTodos = createAction(GET_TODOS, () => ({ isLocal: true }));
-
 

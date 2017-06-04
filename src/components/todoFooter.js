@@ -9,6 +9,7 @@ import {
   compose,
   withProps,
 } from 'recompose';
+import { Button } from 'antd';
 import { some, prop } from 'lodash/fp';
 import '../containers/app.css';
 
@@ -24,6 +25,6 @@ export default compose(
   })),
 )(({ style, clearComplete }) => (
   <footer className="footer">
-    <button style={style} className='clear-completed button' onClick={clearComplete}>清除已完成</button>
+    <Button type='primary' style={style} className='clear-completed' onClick={clearComplete}>清除已完成</Button>
   </footer>
 ));

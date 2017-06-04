@@ -468,3 +468,23 @@ a {
 .view{
   width: 500px;
 }
+.ant-modal-close{
+  color: #f5f5f5;
+}
+.Editing{
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  border-bottom: 1px solid #ccc;
+}
+.ant-modal-body {
+  max-height: 400px;
+  overflow: scroll;
+}
+
+.Flex {
+  display: flex;
+  justify-content: space-between;
+}

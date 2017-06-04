@@ -17,7 +17,7 @@ export const ADD_TYPE = 'ADD_TYPE';
 
 export const addTodo = createAction(ADD_TODO, (text,type, time) => ({text,type, time}));
 export const editStatus = createAction(EDIT_STATUS);
-export const editTodo = createAction(EDIT_TODO, (text, id, time) => ({ text, id, time }));
+export const editTodo = createAction(EDIT_TODO, (text, id, time, type) => ({ text, id, time, type }));
 export const completeTodo = createAction(COMPLETE_TODO);
 export const delTodo = createAction(DEL_TODO);
 export const clearComplete = createAction(CLEAR_COMPLETE);

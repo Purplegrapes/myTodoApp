@@ -28,6 +28,8 @@ export default compose(
   toggleTodo,
   editStatus,
   typeTodos,
+  selectedType,
+  types,
 }) => {
   return (
     <section className="main">
@@ -46,6 +48,8 @@ export default compose(
               delTodo={delTodo}
               editTodo={editTodo}
               editStatus={editStatus}
+              selectedType={selectedType}
+              types={types}
             />,
           )(typeTodos)
         }

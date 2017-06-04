@@ -204,6 +204,8 @@ export default compose(
           delTodo={delTodo}
           toggleTodo={toggleAll}
           clearComplete={clearComplete}
+          selectedType={selectedType}
+          types={types}
         />
         <TodoFooter
           typeTodos={typeTodos}
@@ -215,6 +217,5 @@ export default compose(
         />
       </div>
     </div>
-    <div className="footBox"></div>
   </div>
 ));

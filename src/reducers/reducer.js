@@ -84,7 +84,7 @@ const todoReducer = handleActions({
             }})(todoResult.todos),
     });
   },
-  [EDIT_TODO]: (todoResult, { payload: { id, text, time } }) => ({
+  [EDIT_TODO]: (todoResult, { payload: { id, text, time, type } }) => ({
       ...todoResult,
       todos: map(todo => {
           if (todo.id !== id) {
@@ -94,6 +94,7 @@ const todoReducer = handleActions({
               ...todo,
               text,
               time,
+              type,
               edited: false,
           };
       })(todoResult.todos),

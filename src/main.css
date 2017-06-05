@@ -347,11 +347,9 @@ html .clear-completed:active {
 .Header {
     background: #981919;
     height: 50px;
-    font-size: 25px;
-    color:#ffffff;
-    font-weight: 600;
-    text-align: center;
     line-height: 50px;
+    display: flex;
+    justify-content: space-between;
 }
 .footBox {
   height: 30px;
@@ -555,4 +553,27 @@ input {
   vertical-align: middle;
   font-size: 28px;
   color: #999;
+}
+#components-form-demo-normal-login .login-form {
+  max-width: 300px;
+}
+#components-form-demo-normal-login .login-form-forgot {
+  float: right;
+}
+#components-form-demo-normal-login .login-form-button {
+  width: 100%;
+}
+.SignIn {
+  width: 500px;
+}
+.title {
+  font-size: 25px;
+  color:#ffffff;
+  font-weight: 600;
+}
+.name {
+  font-size: 20px;
+  color:#ffffff;
+  text-align: center;
+  padding-left: 90px;
 }

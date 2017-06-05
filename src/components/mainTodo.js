@@ -16,10 +16,9 @@ import TodoFooter from './todoFooter';
 
 export default compose(
   pure,
-  setDisplayName('TodoFooter'),
   setPropTypes({
     hideDone: PropTypes.func,
-    completedTodos: PropTypes.array.isRequired,
+    completedTodos: PropTypes.array,
   }),
 )(({
   selectType,

@@ -14,10 +14,9 @@ import '../containers/app.css';
 
 export default compose(
   pure,
-  setDisplayName('TodoFooter'),
   setPropTypes({
     hideDone: PropTypes.func,
-    completedTodos: PropTypes.array.isRequired,
+    completedTodos: PropTypes.array,
   }),
 )(({ hideDone, done, completedTodos, clearAllCompletedHandler, completeTodo}) => (
   <Modal

@@ -18,7 +18,7 @@ export default compose(
   setDisplayName('TodoFooter'),
   setPropTypes({
     clearComplete: PropTypes.func,
-    typeTodos: PropTypes.array.isRequired,
+    typeTodos: PropTypes.array,
   }),
   withProps(({ typeTodos }) => ({
     style: (some(todo => todo.completed)(typeTodos) && prop('length')(typeTodos) !== 0) ? null : { display: 'none' },

@@ -4,7 +4,7 @@
 import React, {  PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Icon, Popover, Timeline } from 'antd';
+import { Icon, Popover } from 'antd';
 import {
   compose,
   pure,
@@ -20,6 +20,7 @@ import CheckDone from '../components/checkDone';
 import CheckUnDone from '../components/checkUnDone';
 import ShowTimeLine from '../components/showTimeLine';
 import MainTodo from '../components/mainTodo';
+import WrappedHorizontalLoginForm from '../components/signIn';
 import '../main.css';
 import {
   addTodo as addTodoAction,
@@ -34,8 +35,6 @@ import {
   clearAllCompleted as clearAllCompletedAction,
 } from '../actions/action';
 import './app.css';
-
-const Item = Timeline.Item;
 
 export default compose(
   pure,
@@ -80,6 +79,8 @@ export default compose(
   withState('list', 'setList', []),
   withState('line', 'setLine', false),
   withState('done', 'setDone', false),
+  withState('submit', 'setSubmit', false),
+  withState('value', 'setValue', 'hty20@a.com'),
   withHandlers({
     showModal: ({ setShow, setList }) => (todo) => {
       setList(todo);
@@ -101,6 +102,14 @@ export default compose(
     },
     hideLine: ({ setLine }) => () => {
       setLine(false);
+    },
+    hideSubmit: ({ setSubmit }) => () => {
+      setSubmit(false);
+
+    },
+    showSubmit: ({ setSubmit }) => () => {
+      setSubmit(true);
+
     },
     clearAllCompletedHandler: ({ clearAllCompleted, setShow }) => (ids) => {
       clearAllCompleted(ids);
@@ -170,12 +179,18 @@ export default compose(
   unCompletedTodos,
   completedTodos,
   color,
+  hideSubmit,
+  submit,
+  value,
+  setValue,
+  showSubmit,
 }) => (
   <div>
     <div className='Header'>
-      备忘录
+      <span className="name" onClick={showSubmit}>{value}</span>
+      <span className="title">备忘录</span>
       <Popover placement="bottomRight" content={content} >
-        <Icon type="ellipsis" style={{ float: "right", margin: "10px 15px 0 0"}}/>
+        <Icon type="ellipsis" style={{ margin: "10px 15px 0 0"}} className="title" />
       </Popover>
     </div>
     <CheckDone
@@ -211,6 +226,11 @@ export default compose(
       selectedType={selectedType}
       color={color}
       name={name}
+    />
+    <WrappedHorizontalLoginForm
+      submit={submit}
+      setValue={setValue}
+      hideSubmit={hideSubmit}
     />
   </div>
 ));

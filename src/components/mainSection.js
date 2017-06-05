@@ -13,7 +13,6 @@ export default compose(
   setPropTypes({
     onTodoClick: PropTypes.func,
     editTodo: PropTypes.func,
-    editStatus: PropTypes.func,
     toggleTodo: PropTypes.func,
     delTodo: PropTypes.func,
     typeTodos: PropTypes.array,
@@ -26,7 +25,6 @@ export default compose(
   delTodo,
   editTodo,
   toggleTodo,
-  editStatus,
   typeTodos,
   selectedType,
   types,
@@ -50,7 +48,6 @@ export default compose(
               onTodoClick={onTodoClick}
               delTodo={delTodo}
               editTodo={editTodo}
-              editStatus={editStatus}
               selectedType={selectedType}
               types={types}
             />,

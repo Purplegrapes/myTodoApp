@@ -15,13 +15,11 @@ import {
   withHandlers,
 } from 'recompose';
 import { prop, filter, propEq, flow, find, map, reject, sortBy } from 'lodash/fp';
-import AddTodo from '../components/addTodo';
-import About from '../components/type';
-import MainSection from '../components/mainSection';
-import TodoFooter from '../components/todoFooter';
+
 import CheckDone from '../components/checkDone';
 import CheckUnDone from '../components/checkUnDone';
 import ShowTimeLine from '../components/showTimeLine';
+import MainTodo from '../components/mainTodo';
 import '../main.css';
 import {
   addTodo as addTodoAction,
@@ -198,38 +196,21 @@ export default compose(
       timeTodos={timeTodos}
       hideLine={hideLine}
     />
-
-    <div className='appBox'>
-      <About
-        selectType={selectType}
-        typeTodos={typeTodos}
-        todos={todos}
-        types={types}
-        addType={addType}
-      >
-      </About>
-      <div className='todoapp'>
-        <h1 style={{ color }}>{name}</h1>
-        <MainSection
-          typeTodos={typeTodos}
-          editTodo={editTodo}
-          editStatus={editStatus}
-          onTodoClick={completeTodo}
-          delTodo={delTodo}
-          toggleTodo={toggleAll}
-          clearComplete={clearComplete}
-          selectedType={selectedType}
-          types={types}
-        />
-        <TodoFooter
-          typeTodos={typeTodos}
-          clearComplete={clearComplete}
-        />
-        <AddTodo
-          onAddClick={addTodo}
-          selectedType={selectedType}
-        />
-      </div>
-    </div>
+    <MainTodo
+      selectType={selectType}
+      typeTodos={typeTodos}
+      todos={todos}
+      addType={addType}
+      editTodo={editTodo}
+      onTodoClick={completeTodo}
+      delTodo={delTodo}
+      toggleTodo={toggleAll}
+      clearComplete={clearComplete}
+      types={types}
+      onAddClick={addTodo}
+      selectedType={selectedType}
+      color={color}
+      name={name}
+    />
   </div>
 ));

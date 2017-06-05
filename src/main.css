@@ -532,3 +532,9 @@ input {
   font-size: 25px;
   line-height: 300px;
 }
+.Sign {
+  float: right;
+  font-size: 12px;
+  padding-top: 10px;
+  color: #981919;
+}

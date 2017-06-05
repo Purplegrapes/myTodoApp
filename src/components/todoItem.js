@@ -35,9 +35,9 @@ class TodoItem extends Component {
     });
   };
   changeDate = () => {
-    const { time, text } = this.state;
+    const { time, text, type } = this.state;
     const { id, editTodo } = this.props;
-    editTodo(text,id, time);
+    editTodo(text,id, time, type);
     this.setState({
       visible: false,
     });
@@ -120,6 +120,7 @@ class TodoItem extends Component {
               style={{ textDecoration: completed ? 'line-through' : 'none' }}
             >
               {text}
+                <span className="Sign">截止时间：{time}</span>
             </label>
             </Tooltip>
 

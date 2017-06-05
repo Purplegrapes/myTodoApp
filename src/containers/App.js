@@ -4,7 +4,7 @@
 import React, {  PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Icon, Popover, Modal, Timeline, Button, Tooltip } from 'antd';
+import { Icon, Popover, Timeline } from 'antd';
 import {
   compose,
   pure,
@@ -19,6 +19,9 @@ import AddTodo from '../components/addTodo';
 import About from '../components/type';
 import MainSection from '../components/mainSection';
 import TodoFooter from '../components/todoFooter';
+import CheckDone from '../components/checkDone';
+import CheckUnDone from '../components/checkUnDone';
+import ShowTimeLine from '../components/showTimeLine';
 import '../main.css';
 import {
   addTodo as addTodoAction,
@@ -177,61 +180,25 @@ export default compose(
         <Icon type="ellipsis" style={{ float: "right", margin: "10px 15px 0 0"}}/>
       </Popover>
     </div>
-    <Modal
-      title={"已完成任务"}
-      visible={done}
-      onCancel={hideDone}
-      footer={completedTodos.length === 0 ? null :
-        <Button
-          style={{color: "rgba(150, 23, 23, 0.79)"}}
-          onClick={() => clearAllCompletedHandler(map(prop('id'))(completedTodos))}>清除已完成</Button>}
-    >
-      {completedTodos.length === 0 ?
-        <span style={{ textAlign: 'center'}}>暂无数据</span> : map(({ text, id, completed }) => <div className="view" key={id}>
-          <input className="toggle" type="checkBox" checked={completed} onChange={() => completeTodo(id)} />
-          <label
-            style={{ textDecoration: completed ? 'line-through' : 'none' }}
-          >
-            {text}
-          </label>
-        </div>)(completedTodos)}
-    </Modal>
-    <Modal
-      title={"未完成任务"}
-      visible={show}
-      onCancel={hideModal}
-      footer={unCompletedTodos.length === 0 ? null :
-        <Button
-          style={{color: "rgba(150, 23, 23, 0.79)"}}
-        >完成所有任务</Button>}
-    >
-      {unCompletedTodos.length === 0 ?
-        <span style={{ textAlign: 'center'}}>暂无数据</span> : map(({ text, id, completed }) => <div className="view" key={id}>
-          <input className="toggle" type="checkBox" checked={completed} onChange={() => completeTodo(id)} />
-          <label
-            style={{ textDecoration: completed ? 'line-through' : 'none' }}
-          >
-            {text}
-          </label>
-        </div>)(unCompletedTodos)}
-    </Modal>
-    <Modal
-      title="按截止时间查看"
-      visible={line}
-      onCancel={hideLine}
-      footer={null}
-    >
-      <Timeline>
-        {map(({ text, id, completed, time }) => <div className="view" key={id}>
+    <CheckDone
+      done={done}
+      completedTodos={completedTodos}
+      clearAllCompletedHandler={clearAllCompletedHandler}
+      hideDone={hideDone}
+      completeTodo={completeTodo}
+    />
+    <CheckUnDone
+      show={show}
+      unCompletedTodos={unCompletedTodos}
+      hideModal={hideModal}
+      completeTodo={completeTodo}
+    />
+    <ShowTimeLine
+      line={line}
+      timeTodos={timeTodos}
+      hideLine={hideLine}
+    />
 
-          <Item
-            style={{ textDecoration: completed ? 'line-through' : 'none' }}
-          >
-            {text} <span style={{ color: '#7d0f0f'}}>截止时间：{time}</span>
-          </Item>
-        </div>)(timeTodos)}
-      </Timeline>
-    </Modal>
     <div className='appBox'>
       <About
         selectType={selectType}

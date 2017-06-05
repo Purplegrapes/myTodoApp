@@ -2,7 +2,21 @@
  * Created by zhangqiong on 16/12/27.
  */
 import React, { Component, PropTypes } from 'react';
-import { Icon, Modal, DatePicker } from 'antd';
+import { Icon, Modal, DatePicker, Upload, message } from 'antd';
+const getBase64 = (img, callback) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file) => {
+
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isLt2M;
+};
 
 export default class AddTodo extends Component {
   static propTypes = {
@@ -13,6 +27,7 @@ export default class AddTodo extends Component {
     text: '',
     show: false,
     time: null,
+    imageUrl: '',
   };
   handleKeyDown = (e) => {
     const { text } = this.state;
@@ -24,6 +39,13 @@ export default class AddTodo extends Component {
       });
     }
   };
+  handleChangeImage = (info) => {
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
+    }
+  };
+
   addTodo = () => {
     const { text, time } = this.state;
     const { onAddClick,selectedType } = this.props;
@@ -64,6 +86,7 @@ export default class AddTodo extends Component {
   };
 
   render() {
+    const imageUrl = this.state.imageUrl;
     return (
       <div className="header">
         <div onClick={this.showInput} className='addBox'>
@@ -90,6 +113,20 @@ export default class AddTodo extends Component {
               onChange={this.setDate}
             />
           </div>
+          <Upload
+            className="avatar-uploader"
+            name="avatar"
+            showUploadList={false}
+            action="http://localhost:3000/"
+            beforeUpload={beforeUpload}
+            onChange={this.handleChangeImage}
+          >
+            {
+              imageUrl ?
+                <img src={imageUrl} alt="" className="avatar" /> :
+                <Icon type="plus" className="avatar-uploader-trigger" />
+            }
+          </Upload>
         </Modal>
       </div>
     );

@@ -4,7 +4,7 @@
 import React, {  PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Icon, Popover, Modal, Timeline, Button } from 'antd';
+import { Icon, Popover, Modal, Timeline, Button, Tooltip } from 'antd';
 import {
   compose,
   pure,
@@ -78,6 +78,7 @@ export default compose(
   withState('show', 'setShow', false),
   withState('list', 'setList', []),
   withState('line', 'setLine', false),
+  withState('done', 'setDone', false),
   withHandlers({
     showModal: ({ setShow, setList }) => (todo) => {
       setList(todo);
@@ -87,6 +88,12 @@ export default compose(
     hideModal: ({ setShow }) => () => {
       setShow(false);
     },
+    showDone: ({ setDone })  => {
+      setDone(true);
+    },
+    hideDone: ({ setDone }) => () => {
+      setDone(false);
+    },
     showLine: ({ setLine }) => () => {
       setLine(true);
 
@@ -94,28 +101,32 @@ export default compose(
     hideLine: ({ setLine }) => () => {
       setLine(false);
     },
-    clearAllCompletedHandler: ({ list, clearAllCompleted, setShow }) => (ids) => {
+    clearAllCompletedHandler: ({ clearAllCompleted, setShow }) => (ids) => {
       clearAllCompleted(ids);
       setShow(false);
     }
   }),
-  withProps(({ todos }) => ({
+  withProps(({ todos, types, selectedType}) => ({
     completedTodos: filter(todo => todo.completed)(todos),
     unCompletedTodos: reject(todo => todo.completed)(todos),
     timeTodos: sortBy('time')(todos),
+    color: flow(
+      find(propEq('id', selectedType )),
+      prop('color'),
+    )(types),
   })),
-  withProps(({ selectedType, types, showLine, showModal, completedTodos, unCompletedTodos }) => ({
+  withProps(({ selectedType, types, showLine, showModal, showDone, completedTodos, unCompletedTodos }) => ({
     name: flow(
       find(propEq('id', selectedType)),
       prop('name'),
     )(types),
     content: (
       <div>
-        <div className="setting2" onClick={() => showModal(completedTodos)}>
+        <div className="setting2" onClick={() => showDone()}>
           <Icon type="check" className="Icon"/>
           <div className="text">已完成任务</div>
         </div>
-        <div className="setting2" onClick={() => showModal(unCompletedTodos)}>
+        <div className="setting2" onClick={() => showModal()}>
           <Icon type="exclamation" className="Icon"/>
           <div className="text">未完成任务</div>
         </div>
@@ -153,6 +164,11 @@ export default compose(
   line,
   timeTodos,
   clearAllCompletedHandler,
+  hideDone,
+  done,
+  unCompletedTodos,
+  completedTodos,
+  color,
 }) => (
   <div>
     <div className='Header'>
@@ -162,20 +178,42 @@ export default compose(
       </Popover>
     </div>
     <Modal
-      title={prop('completed')(list[0]) ? "已完成任务" : "未完成任务"}
-      visible={show}
-      onCancel={hideModal}
-      footer={list.length === 0 || !prop('completed')(list[0]) ? null :
-        <Button onClick={() => clearAllCompletedHandler(map(prop('id'))(list))}>清除已完成</Button>}
+      title={"已完成任务"}
+      visible={done}
+      onCancel={hideDone}
+      footer={completedTodos.length === 0 ? null :
+        <Button
+          style={{color: "rgba(150, 23, 23, 0.79)"}}
+          onClick={() => clearAllCompletedHandler(map(prop('id'))(completedTodos))}>清除已完成</Button>}
     >
-      {list.length === 0 ?
+      {completedTodos.length === 0 ?
         <span style={{ textAlign: 'center'}}>暂无数据</span> : map(({ text, id, completed }) => <div className="view" key={id}>
+          <input className="toggle" type="checkBox" checked={completed} onChange={() => completeTodo(id)} />
           <label
             style={{ textDecoration: completed ? 'line-through' : 'none' }}
           >
             {text}
           </label>
-        </div>)(list)}
+        </div>)(completedTodos)}
+    </Modal>
+    <Modal
+      title={"未完成任务"}
+      visible={show}
+      onCancel={hideModal}
+      footer={unCompletedTodos.length === 0 ? null :
+        <Button
+          style={{color: "rgba(150, 23, 23, 0.79)"}}
+        >完成所有任务</Button>}
+    >
+      {unCompletedTodos.length === 0 ?
+        <span style={{ textAlign: 'center'}}>暂无数据</span> : map(({ text, id, completed }) => <div className="view" key={id}>
+          <input className="toggle" type="checkBox" checked={completed} onChange={() => completeTodo(id)} />
+          <label
+            style={{ textDecoration: completed ? 'line-through' : 'none' }}
+          >
+            {text}
+          </label>
+        </div>)(unCompletedTodos)}
     </Modal>
     <Modal
       title="按截止时间查看"
@@ -204,7 +242,7 @@ export default compose(
       >
       </About>
       <div className='todoapp'>
-        <h1>{name}</h1>
+        <h1 style={{ color }}>{name}</h1>
         <MainSection
           typeTodos={typeTodos}
           editTodo={editTodo}

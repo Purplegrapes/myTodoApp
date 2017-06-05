@@ -11,12 +11,10 @@ class TodoItem extends Component {
   static propTypes = {
     onTodoClick: PropTypes.func,
     editTodo: PropTypes.func,
-    editStatus: PropTypes.func,
     delTodo: PropTypes.func,
     text: PropTypes.string,
     completed: PropTypes.bool,
     id: PropTypes.string,
-    edited: PropTypes.bool,
   };
   state = {
     text: this.props.text,
@@ -96,8 +94,6 @@ class TodoItem extends Component {
     const {
       text,
       completed,
-      edited,
-      editStatus,
       onTodoClick,
       id,
       time,
@@ -105,16 +101,13 @@ class TodoItem extends Component {
       selectedType,
       types,
     } = this.props;
-    const inputStyle = edited === true ? 'editing' : null;
     const defaultType = flow(
       find(propEq('id', selectedType)),
       prop('name'),
     )(types);
     return (
       <li
-        className={inputStyle}
       >
-
           <div>
             <input className="toggle" type="checkBox" checked={completed} onChange={() => onTodoClick(id)} />
 
@@ -124,7 +117,6 @@ class TodoItem extends Component {
               placement="bottomLeft"
             >
               <label
-              onDoubleClick={() => editStatus(id)}
               style={{ textDecoration: completed ? 'line-through' : 'none' }}
             >
               {text}
@@ -133,8 +125,6 @@ class TodoItem extends Component {
 
             <button className="destroy" onClick={() => delTodo(id)} />
           </div>
-
-
 
         <Modal
           title="更改截止日期"
@@ -156,7 +146,9 @@ class TodoItem extends Component {
           onCancel={this.hideEdit}
         >
           <div style={{ marginTop: "10px"}}>
-            <input className="edit" value={this.state.text} onChange={this.handleChange}/>
+            <input
+              style={{ height: "30px", width: "100%", fontSize: "18px", paddingLeft:"10px"}}
+              value={this.state.text} onChange={this.handleChange}/>
             <div className="Editing">
               <div>
                 <Icon type="exception" className="Icon" />
@@ -173,7 +165,7 @@ class TodoItem extends Component {
                 )(types)}
               </Select>
             </div>
-            <div style={{ marginTop: "10px"}} className="Flex">
+            <div style={{ marginTop: "10px", padding: "0 10px", fontSize: "15px"}} className="Flex">
               {time}
               <DatePicker
                 placeholder="请修改日期"
@@ -182,13 +174,6 @@ class TodoItem extends Component {
             </div>
           </div>
         </Modal>
-        <input className="edit" value={this.state.text} onChange={this.handleChange} onBlur={this.handleKeyDown} ref={input => this.textInput = input}/>
-          {edited ?
-              <div className='editBox'>
-                  <button className='button' onClick={this.handleKeyDown}>保存</button>
-              </div> :
-              null
-          }
       </li>
 
     );

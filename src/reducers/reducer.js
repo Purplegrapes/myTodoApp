@@ -129,10 +129,10 @@ const todoReducer = handleActions({
     todos:[],
     types: [
       { name: '个人', id: 'person', color: '#04A3FF'},
-      { name: '工作', id: uuid.v4(), color: '#FFA400'},
-      { name: '学习', id: uuid.v4(), color: '#008B00'},
-      { name: '购物', id: uuid.v4(), color: '#C1232B'},
-      { name: '家庭', id: uuid.v4(), color: '#27727B'},
+      { name: '工作', id: 'work', color: '#FFA400'},
+      { name: '学习', id: 'study', color: '#008B00'},
+      { name: '购物', id: 'shopping', color: '#C1232B'},
+      { name: '家庭', id: 'home', color: '#27727B'},
     ]
   });
 

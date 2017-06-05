@@ -38,7 +38,10 @@ export default compose(
         checked={prop('length')(typeTodos) === 0 ? false : every(todo => prop('completed')(todo))(typeTodos)}
         onChange={toggleTodo}
       />
-      <ul className="todo-list">
+      {typeTodos.length === 0 ? <div className="Null">
+          此分类暂无待办事项
+        </div> :
+        <ul className="todo-list">
         {
           map(todo =>
             <TodoItem
@@ -54,6 +57,7 @@ export default compose(
           )(typeTodos)
         }
       </ul>
+      }
     </section>
   )
 });

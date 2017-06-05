@@ -79,7 +79,7 @@ input[type="checkbox"] {
   font-size: 25px;
   font-weight: 300;
   text-align: center;
-  color: #af5b5e;
+  color: #981919;
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
@@ -432,6 +432,8 @@ a {
 }
 .text {
   border-bottom: 1px solid #ccc;
+  text-align: left;
+  width: 80%;
 }
 .setting2{
   height: 30px;
@@ -449,7 +451,7 @@ a {
 .view label {
   white-space: pre-line;
   word-break: break-all;
-  padding: 10px 60px 10px 15px;
+  padding: 10px 60px 10px 30px;
   display: block;
   font-size: 15px;
   line-height: 1.2;
@@ -468,6 +470,7 @@ a {
 }
 .view{
   width: 500px;
+  position: relative;
 }
 .ant-modal-close{
   color: #f5f5f5;
@@ -498,7 +501,7 @@ a {
 }
 .ant-btn:hover{
   background-color: #981919;
-  color: #ffffff;
+  color: #ffffff!important;
   border: none;
 }
 .Radius {
@@ -511,4 +514,21 @@ a {
 input {
   border: none;
   border-bottom: 1px solid #ccc;
+}
+.view .toggle {
+  text-align: center;
+  width: 40px;
+  /* auto, since non-WebKit browsers doesn't support input styling */
+  height: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  border: none; /* Mobile Safari */
+}
+.Null {
+  height: 300px;
+  text-align: center;
+  font-size: 25px;
+  line-height: 300px;
 }
